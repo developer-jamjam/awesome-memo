@@ -1,8 +1,29 @@
+async function editMemo(e) {
+  const id = e.target.dataset.id;
+  const editInput = prompt("수정할 값을 입력하쎄오!");
+  const res = await fetch(`/memo/${id}`, {
+    method: "PUT", //어떤 메소드로 보낼 것인가? 값을 수정할땐 PUT
+    headers: { "Content-Type": "application/json" }, // request body를 보낼때 필수적으로 넣어야 하는 header
+    body: JSON.stringify({
+      id,
+      content: editInput,
+    }),
+  });
+
+  readMemo();
+}
+
 function displayMemo(memo) {
   const ul = document.querySelector("#memo-ul");
   const li = document.createElement("li");
+  const editBtn = document.createElement("button");
+
   li.innerText = `[id:${memo.id}] ${memo.content}`;
+  editBtn.innerText = "수정하기";
+  editBtn.addEventListener("click", editMemo);
+  editBtn.dataset.id = memo.id;
   ul.appendChild(li);
+  li.appendChild(editBtn);
 }
 
 async function readMemo() {
