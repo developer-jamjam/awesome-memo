@@ -1,3 +1,20 @@
+function displayMemo(memo) {
+  const ul = document.querySelector("#memo-ul");
+  const li = document.createElement("li");
+  li.innerText = `[id:${memo.id}] ${memo.content}`;
+  ul.appendChild(li);
+}
+
+async function readMemo() {
+  const res = await fetch("/memos"); //default로 get요청이 간다.
+  const jsonRes = await res.json();
+  const ul = document.querySelector("#memo-ul");
+  ul.innerHTML = "";
+  jsonRes.forEach(displayMemo);
+  // 배열의 각각의 요소에 대해서 함수를 실행한다.
+}
+
+readMemo();
 async function createMemo(val) {
   const res = await fetch("/memos", {
     //fetch로만 보내게 되면 get요청이 가기 때문에 옵션을 준다.
@@ -12,8 +29,7 @@ async function createMemo(val) {
         다시 문자열로 바꿔서 보내고 받아서 json형태로 바꾸는 과정들이 필요하다.
     */
   });
-  const jsonRes = await res.json();
-  console.log(jsonRes);
+  readMemo();
 }
 
 function handleSubmit(e) {
